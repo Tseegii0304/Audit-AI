@@ -1,12 +1,13 @@
 """
 Audit AI — Аудитын эрсдэлийг бууруулах хиймэл оюун, машин сургалтад суурилсан загвар
-Гүйлгээний баланс + Ерөнхий журнал + Машин сургалт + Тайлбарлагдах хиймэл оюун (XAI)
+Гүйлгээний баланс + Ерөнхий журнал + Машин сургалт + Тайлбарлагдах ХОУ (XAI)
 Эх сурвалж: УЛАМБАЯРЫН ЦЭЦЭГЖАРГАЛ — Бизнесийн удирдлагын ухааны докторын зэрэг горилсон бүтээл, МУИС-БС, 2026
 
 pip install -r requirements.txt
 streamlit run audit_ai.py
 """
 import streamlit as st
+import streamlit.components.v1 as components
 import pandas as pd
 import numpy as np
 import plotly.express as px
@@ -275,20 +276,14 @@ section[data-testid="stFileUploader"]:hover {
     border-color: var(--accent) !important; background: rgba(212,160,23,0.05) !important;
     box-shadow: 0 4px 14px rgba(212,160,23,0.12) !important; transform: translateY(-1px);
 }
-/* Browse товчны давхар текстийг засах (Streamlit Cloud рендер алдаа) */
 section[data-testid="stFileUploader"] button {
-    position: relative !important; font-size: 0 !important;
-    background: var(--accent) !important; color: #fff !important;
+    background: var(--accent) !important; color: #0B1423 !important;
     border: none !important; border-radius: 8px !important;
-    padding: 8px 20px !important; transition: all 0.2s ease !important;
-}
-section[data-testid="stFileUploader"] button > * { display: none !important; }
-section[data-testid="stFileUploader"] button::after {
-    content: 'Файл сонгох'; font-size: 14px !important; font-weight: 600 !important;
-    color: #fff !important; letter-spacing: 0.2px;
+    font-weight: 700 !important; padding: 8px 22px !important;
+    transition: all 0.2s ease !important; cursor: pointer !important;
 }
 section[data-testid="stFileUploader"] button:hover {
-    background: var(--accent-dark, #B8860B) !important;
+    background: #B8860B !important; color: #fff !important;
     transform: scale(1.03) !important; box-shadow: 0 4px 12px rgba(212,160,23,0.3) !important;
 }
 section[data-testid="stFileUploader"] [data-testid="stFileUploaderDropzoneInstructions"] span,
@@ -346,6 +341,36 @@ hr { border-top: 1px solid var(--border) !important; margin: 1.5rem 0 !important
 </style>
 """
 st.markdown(THEME_CSS, unsafe_allow_html=True)
+
+# ── Файл оруулах товчны давхар текстийг засах (Streamlit Cloud рендер засвар) ──
+# st.markdown нь <script>-ийг устгадаг тул components.html ашиглаж parent DOM-д хүрнэ.
+components.html("""
+<script>
+(function(){
+  function fixUploaders(){
+    try {
+      var root = window.parent.document;
+      var btns = root.querySelectorAll('section[data-testid="stFileUploader"] button, [data-testid="stFileUploaderDropzone"] button');
+      btns.forEach(function(b){
+        if (b.getAttribute('data-aifix') === '1') return;
+        var t = (b.innerText || b.textContent || '').trim().toLowerCase();
+        if (t.indexOf('upload') !== -1 || t.indexOf('browse') !== -1 || t.indexOf('файл') !== -1) {
+          b.textContent = 'Файл сонгох';
+          b.setAttribute('data-aifix','1');
+        }
+      });
+    } catch(e){}
+  }
+  fixUploaders();
+  try {
+    var doc = window.parent.document;
+    var obs = new MutationObserver(function(){ fixUploaders(); });
+    obs.observe(doc.body, {childList:true, subtree:true});
+  } catch(e){}
+  setInterval(fixUploaders, 700);
+})();
+</script>
+""", height=0)
 
 # ── Толгой хэсэг ──
 st.markdown("""
@@ -472,7 +497,7 @@ with st.sidebar:
         "6️⃣ Сургалт/Шалгалт (машин сургалт)",
         "7️⃣ Нарийвчилсан машин сургалт",
         "🏛️ Мөнгөн гүйлгээний журнал",
-        "📊 Эдийн засгийн ангилал нийцэл",
+        "📊 ЭЗ ангилал нийцэл",
         "⚖️ Хуулийн зөрчил шалгалт",
         "💰 Зардлын ангилал",
         "🔍 Харилцагч ISA 550",
