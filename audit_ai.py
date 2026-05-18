@@ -79,7 +79,7 @@ except Exception:
     seasonal_decompose = None
 
 td = TabDescriptions()
-st.set_page_config(page_title="Audit AI v10.0 — Аудитын хиймэл оюуны систем", page_icon="🛡️", layout="wide")
+st.set_page_config(page_title="Audit AI — Аудитын хиймэл оюуны систем", page_icon="🛡️", layout="wide")
 
 # Gov audit session state initialization
 for _gk in ['g_expense_class','g_budget','g_cash','g_ej','g_laws','g_ej_done','g_ej_fi','g_ej_ml','g_ej_models','g_ej_xai','g_ez','g_policy']:
@@ -202,6 +202,10 @@ div[data-testid="stMetric"] [data-testid="stMetricDelta"] { font-size: 12px !imp
     border-radius: var(--radius-sm) !important; padding: 8px 20px !important;
     font-weight: 500 !important; color: var(--text-secondary) !important;
     background: transparent !important; border: none !important; transition: all 0.2s ease;
+    cursor: pointer !important;
+}
+.stTabs [data-baseweb="tab"]:hover {
+    background: rgba(212,160,23,0.08) !important; color: var(--accent-dark) !important;
 }
 .stTabs [aria-selected="true"] {
     background: var(--bg-card) !important; color: var(--primary-dark) !important;
@@ -237,11 +241,21 @@ div[data-testid="stMetric"] [data-testid="stMetricDelta"] { font-size: 12px !imp
 .stDownloadButton > button {
     border: 1.5px solid #5B8A72 !important; color: #5B8A72 !important;
     border-radius: var(--radius-sm) !important; background: #E8F5E9 !important; font-weight: 600 !important;
+    transition: all 0.2s ease !important; cursor: pointer !important;
 }
-.stDownloadButton > button:hover { background: #5B8A72 !important; color: white !important; }
+.stDownloadButton > button:hover {
+    background: #5B8A72 !important; color: white !important;
+    transform: translateY(-1px) !important; box-shadow: 0 4px 12px rgba(91,138,114,0.3) !important;
+}
 
 /* ── DataFrames ── */
 .stDataFrame { border: 1px solid var(--border) !important; border-radius: var(--radius-md) !important; overflow: hidden; box-shadow: var(--shadow-sm); }
+.stDataFrame [role="row"]:hover { background: rgba(212,160,23,0.04) !important; }
+
+/* ── Radio / Selectbox cursor feedback ── */
+.stRadio label, .stSelectbox div, .stMultiSelect div, label[data-baseweb="radio"] { cursor: pointer !important; }
+section[data-testid="stSidebar"] .stRadio label { transition: all 0.15s ease !important; }
+section[data-testid="stSidebar"] .stRadio label:hover { opacity: 0.85 !important; }
 
 /* ── Expanders ── */
 .streamlit-expanderHeader {
@@ -255,9 +269,32 @@ div[data-testid="stAlert"] { border-radius: var(--radius-sm) !important; border-
 /* ── File Uploader — Gold hover ── */
 section[data-testid="stFileUploader"] {
     border: 2px dashed var(--border) !important; border-radius: var(--radius-md) !important;
-    padding: 10px !important; background: var(--border-light) !important; transition: all 0.3s;
+    padding: 14px !important; background: var(--border-light) !important; transition: all 0.25s ease;
 }
-section[data-testid="stFileUploader"]:hover { border-color: var(--accent) !important; background: rgba(212,160,23,0.03) !important; }
+section[data-testid="stFileUploader"]:hover {
+    border-color: var(--accent) !important; background: rgba(212,160,23,0.05) !important;
+    box-shadow: 0 4px 14px rgba(212,160,23,0.12) !important; transform: translateY(-1px);
+}
+/* Browse товчны давхар текстийг засах (Streamlit Cloud рендер алдаа) */
+section[data-testid="stFileUploader"] button {
+    position: relative !important; font-size: 0 !important;
+    background: var(--accent) !important; color: #fff !important;
+    border: none !important; border-radius: 8px !important;
+    padding: 8px 20px !important; transition: all 0.2s ease !important;
+}
+section[data-testid="stFileUploader"] button > * { display: none !important; }
+section[data-testid="stFileUploader"] button::after {
+    content: 'Файл сонгох'; font-size: 14px !important; font-weight: 600 !important;
+    color: #fff !important; letter-spacing: 0.2px;
+}
+section[data-testid="stFileUploader"] button:hover {
+    background: var(--accent-dark, #B8860B) !important;
+    transform: scale(1.03) !important; box-shadow: 0 4px 12px rgba(212,160,23,0.3) !important;
+}
+section[data-testid="stFileUploader"] [data-testid="stFileUploaderDropzoneInstructions"] span,
+section[data-testid="stFileUploader"] [data-testid="stFileUploaderDropzoneInstructions"] small {
+    font-size: 12.5px !important;
+}
 
 /* ── Slider & Progress — Gold ── */
 .stSlider > div > div > div { color: var(--accent-dark) !important; }
@@ -321,7 +358,7 @@ st.markdown("""
         </div>
         <div>
             <h1 style="color:#FFFFFF !important; margin:0; font-size:28px; font-weight:700; letter-spacing:-0.5px;">
-                Audit AI v10.0</h1>
+                Audit AI</h1>
             <p style="color:rgba(255,255,255,0.8); margin:4px 0 0; font-size:14px; font-weight:400;">
                 Дашбоард • Шинжилгээ • Машин сургалт • Тайлан — Аудиторт зориулсан бүрэн систем</p>
         </div>
@@ -422,7 +459,7 @@ with st.sidebar:
             <span style="font-size:22px;">🛡️</span>
         </div>
         <p style="color:#FFFFFF; font-size:22px; font-weight:600; margin:0; font-family:'Cormorant Garamond',Georgia,serif; letter-spacing:0.3px;">Audit AI</p>
-        <p style="color:rgba(255,255,255,0.35); font-size:10px; margin:0; letter-spacing:1.5px; text-transform:uppercase;">v10.0 · Audit AI</p>
+        <p style="color:rgba(255,255,255,0.35); font-size:10px; margin:0; letter-spacing:1.5px; text-transform:uppercase;">Аудитын хиймэл оюун</p>
     </div>
     """, unsafe_allow_html=True)
     page = st.radio("Цэс:", [
@@ -434,7 +471,6 @@ with st.sidebar:
         "5️⃣ Салбарын шинжилгээ",
         "6️⃣ Сургалт/Шалгалт (машин сургалт)",
         "7️⃣ Нарийвчилсан машин сургалт",
-        "8️⃣ Диссертацийн гаралт",
         "🏛️ Мөнгөн гүйлгээний журнал",
         "📊 ЭЗ ангилал нийцэл",
         "⚖️ Хуулийн зөрчил шалгалт",
@@ -5013,7 +5049,7 @@ if page.startswith("7"):
 # ═══════════════════════════════════════════════════════════
 # 8️⃣ ДИССЕРТАЦИЙН ГАРАЛТ
 # ═══════════════════════════════════════════════════════════
-if page.startswith("8"):
+if False and page.startswith("8"):  # Диссертацийн гаралт цэс хасагдсан
     st.header("8️⃣ Диссертацийн чанартай гаралт")
     st.markdown("""
     Бүх шинжилгээний үр дүнг диссертацид бэлэн формат руу нэгтгэнэ:
@@ -5538,5 +5574,6 @@ if page.startswith("📋 Эрсдэлийн"):
 
 st.markdown("---")
 st.caption("Төрийн аудит СТА v1.0 © 2026 — МС/ХОУ суурьтай нийцлийн шалгалтын систем")
+
 
 
