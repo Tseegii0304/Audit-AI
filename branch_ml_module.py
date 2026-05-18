@@ -1,6 +1,6 @@
 """
 branch_ml_module.py — Салбар таних + Train/Test ML pipeline
-Аудитын ХОУ диссертацийн сайжруулалт v7.0
+Аудитын ХОУ диссертацийн сайжруулалт
 """
 import pandas as pd
 import numpy as np
